@@ -1,14 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { google } = require('googleapis');
+const cors = require('cors');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // Google Sheets API setup
-const SPREADSHEET_ID = '1HPuLbh_0ld_eSG2doz0_PLTGi0sGxyBhsrqc8J7p8LU';
-const API_KEY = 'AIzaSyCnLhMgs6gxSk1eIpCP4gm-5A8DJbY79hM';
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const API_KEY = process.env.API_KEY;
 const sheets = google.sheets({ version: 'v4', auth: new google.auth.GoogleAuth({ key: API_KEY }) });
 
 const range = 'Sheet1!A1:E';
