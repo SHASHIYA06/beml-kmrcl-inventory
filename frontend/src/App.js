@@ -1,25 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import InventoryTable from './components/InventoryTable';
 import RequestForm from './components/RequestForm';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 
 function App() {
-  const [inventory, setInventory] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetchInventory();
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  const fetchInventory = async () => {
-    const response = await fetch('/api/inventory');
-    const data = await response.json();
-    setInventory(data);
+  const handleLogin = (userData) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
   };
 
   return (
     <div className="App">
-      <h1>BEML KMRCL Store Inventory</h1>
-      <InventoryTable inventory={inventory} />
-      <RequestForm />
+      {user ? (
+        <>
+          <h1>BEML KMRCL Store Inventory</h1>
+          <button onClick={handleLogout}>Logout</button>
+          <Dashboard user={user} />
+        </>
+      ) : (
+        <Login onLogin={handleLogin} />
+      )}
     </div>
   );
 }
