@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const RequestForm = () => {
+const RequestForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     itemName: '',
     requiredQuantity: '',
@@ -14,15 +14,9 @@ const RequestForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const response = await fetch('/api/requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
-    const data = await response.json();
-    console.log(data);
+    onSubmit(formData);
   };
 
   return (
@@ -47,21 +41,30 @@ const RequestForm = () => {
       </label>
       <label>
         Train Set Number:
-        <input
-          type="text"
+        <select
           name="trainSetNumber"
           value={formData.trainSetNumber}
           onChange={handleChange}
-        />
+        >
+          <option value="TS01">TS01</option>
+          <option value="TS02">TS02</option>
+          {/* Add more options as needed */}
+        </select>
       </label>
       <label>
         Car Number:
-        <input
-          type="text"
+        <select
           name="carNumber"
           value={formData.carNumber}
           onChange={handleChange}
-        />
+        >
+          <option value="DMC1">DMC1</option>
+          <option value="TC1">TC1</option>
+          <option value="MC1">MC1</option>
+          <option value="MC2">MC2</option>
+          <option value="TC2">TC2</option>
+          <option value="DMC2">DMC2</option>
+        </select>
       </label>
       <label>
         NCR Number:
